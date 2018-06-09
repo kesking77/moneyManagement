@@ -2,6 +2,7 @@ package com.example.kimeunsik.moneymanagement;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
+
+import static java.lang.Integer.parseInt;
 
 
 public class ManageActivity extends AppCompatActivity {
@@ -64,7 +67,7 @@ public class ManageActivity extends AppCompatActivity {
 
         //금액 에딧텍스트 값받기
         EditText strValue = (EditText) findViewById(R.id.money);
-        Value = Integer.parseInt(strValue.getText().toString());
+        Value = parseInt(strValue.getText().toString());
 
         //날짜 버튼 datepicker 써보자!
         dateBtn = (Button)findViewById(R.id.dateBtn);
@@ -80,7 +83,7 @@ public class ManageActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ManageActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateBtn.setText(year+"년 "+(month+1)+"월 "+dayOfMonth+"일");
+                        dateBtn.setText(year+"년   "+(month+1)+"월   "+dayOfMonth+"일");
                         cYear=year;
                         cMonth=month+1;
                         cDay=dayOfMonth;
@@ -89,6 +92,27 @@ public class ManageActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+
+        //보내기 버튼 누르면..! 작동 데이터 담아서 메인액티비티로 보내기.
+        // 담아야하는 데이터 : 1)수입지출 체크 2)날짜 3)내역 4)금액    -> 전부 배열로 저장해야함.
+        Button sendBtn = (Button)findViewById(R.id.send);
+        sendBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent data = new Intent();
+                data.putExtra("팩트",inoutFact);
+                data.putExtra("날짜년",cYear);
+                data.putExtra("날짜월",cMonth);
+                data.putExtra("날짜일",cDay);
+                data.putExtra("내역",what);
+                data.putExtra("금액",Value);
+                setResult(RESULT_OK,data);
+                finish();
+            }
+        });
+
 
     }
 

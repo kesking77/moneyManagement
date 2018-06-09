@@ -8,17 +8,30 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    //받아 올 값
-    String inoutFact; //수입 or 지출
-    //날짜
-    int Myear;
-    int Mmonth;
-    int Mdate;
-    String inoutWhat; // 뭐에썼니?
-    int input=0; //수입금액
-    int output=0; //지출금액
 
-    int sum=0;
+    //시작날짜.. 끝날짜
+    int Syear;
+    int Smonth;
+    int Sday;
+    int Eyear;
+    int Emonth;
+    int Eday;
+
+    //배열
+    /*넘겨 받아 관리해야 하는 것
+                1. 수입/지출 –1)어레이
+                2. 날짜 –2)어레이3)시작날 지정하는 변수 – 하나만 있어도ok4)마지막날 지정하는 변수 – 하나만 있어도ok
+                3. 5)내역 -어레이
+                4. 금액 –어레이(6)수입,7)지출,8)합계)*/
+    String aFact; // 수입지출
+    String aWhat; // 뭐에썼니?
+    int aInput=0; //수입금액
+    int aOutput=0; //지출금액
+    int aSum=0; //합계금액
+    int aYear;
+    int aMonth;
+    int aDay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +55,45 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                //관리액티비티시행 돌아올 때 넘겨받을 값 : 1. 수입인지 지출인지 2. 날짜 3. 내역(뭐에썼니?) 4. 금액
+                Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                startActivityForResult(intent,1);
+
+                //테스트
+                TextView ck=(TextView)findViewById(R.id.check);
+                ck.setText(aYear+"년 "+aMonth+"월 "+aDay+"일 "+aInput+"(수입액) "+aOutput+"(지출액) "+aWhat+"(내역) "+aFact+" (수입or지출)");
             }
         });
 
 
 
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode==1){
+            if(resultCode==RESULT_OK){
+
+                aFact=data.getStringExtra("팩트");
+                if(aFact=="지출"){
+                    aYear=data.getIntExtra("날짜년",0);
+                    aMonth=data.getIntExtra("날짜월",0);
+                    aDay=data.getIntExtra("날짜일",0);
+                    aWhat=data.getStringExtra("내역");
+                    aOutput=data.getIntExtra("금액",0);
+                }
+                else{ //수입
+                    aYear=data.getIntExtra("날짜년",0);
+                    aMonth=data.getIntExtra("날짜월",0);
+                    aDay=data.getIntExtra("날짜일",0);
+                    aWhat=data.getStringExtra("내역");
+                    aInput=data.getIntExtra("금액",0);
+                }
+
+            }
+        }
 
     }
 
