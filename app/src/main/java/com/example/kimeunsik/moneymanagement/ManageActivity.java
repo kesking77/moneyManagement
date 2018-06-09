@@ -84,7 +84,7 @@ public class ManageActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ManageActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateBtn.setText(year+"년   "+(month+1)+"월   "+dayOfMonth+"일");
+                        dateBtn.setText(year+"년  "+(month+1)+"월  "+dayOfMonth+"일");
                         cYear=year;
                         cMonth=month+1;
                         cDay=dayOfMonth;
