@@ -73,7 +73,7 @@
                 android:text="   내역" />
 
             <EditText
-                android:id="@+id/what"
+                android:id="@+id/what123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,7 +98,7 @@
                 android:text="   금액" />
 
             <EditText
-                android:id="@+id/money"
+                android:id="@+id/money123"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

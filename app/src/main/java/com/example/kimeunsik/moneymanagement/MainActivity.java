@@ -25,8 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 4. 금액 –어레이(6)수입,7)지출,8)합계)*/
     String aFact; // 수입지출
     String aWhat; // 뭐에썼니?
-    int aInput=0; //수입금액
-    int aOutput=0; //지출금액
+    int aValue=0;
     int aSum=0; //합계금액
     int aYear;
     int aMonth;
@@ -58,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,ManageActivity.class);
                 startActivityForResult(intent,1);
 
+
                 //테스트
                 TextView ck=(TextView)findViewById(R.id.check);
-                ck.setText(aYear+"년 "+aMonth+"월 "+aDay+"일 "+aInput+"(수입액) "+aOutput+"(지출액) "+aWhat+"(내역) "+aFact+" (수입or지출)");
+                ck.setText(aYear+"년 "+aMonth+"월 "+aDay+"일 "+aValue+"(지출액) "+aWhat+"(내역) "+aFact+" (수입or지출)");
+
             }
         });
 
@@ -75,23 +76,12 @@ public class MainActivity extends AppCompatActivity {
     {
         if (requestCode==1){
             if(resultCode==RESULT_OK){
-
-                aFact=data.getStringExtra("팩트");
-                if(aFact=="지출"){
+                      aWhat=data.getStringExtra("내역");
+                    aFact=data.getStringExtra("팩트");
                     aYear=data.getIntExtra("날짜년",0);
                     aMonth=data.getIntExtra("날짜월",0);
                     aDay=data.getIntExtra("날짜일",0);
-                    aWhat=data.getStringExtra("내역");
-                    aOutput=data.getIntExtra("금액",0);
-                }
-                else{ //수입
-                    aYear=data.getIntExtra("날짜년",0);
-                    aMonth=data.getIntExtra("날짜월",0);
-                    aDay=data.getIntExtra("날짜일",0);
-                    aWhat=data.getStringExtra("내역");
-                    aInput=data.getIntExtra("금액",0);
-                }
-
+                    aValue=data.getIntExtra("금액",0);
             }
         }
 

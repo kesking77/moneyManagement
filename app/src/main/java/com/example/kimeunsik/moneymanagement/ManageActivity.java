@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,7 +34,8 @@ public class ManageActivity extends AppCompatActivity {
         int cYear;
         int cMonth;
         int cDay;
-
+        EditText strWhat;
+        EditText strValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +64,11 @@ public class ManageActivity extends AppCompatActivity {
 
 
         //내역 에딧텍스트 값받기
-        EditText strWhat = (EditText) findViewById(R.id.what);
-        what = strWhat.getText().toString();
-
         //금액 에딧텍스트 값받기
-        EditText strValue = (EditText) findViewById(R.id.money);
-        Value = parseInt(strValue.getText().toString());
+         strWhat = (EditText) findViewById(R.id.what123);
+         strValue = (EditText) findViewById(R.id.money123);
+
+
 
         //날짜 버튼 datepicker 써보자!
         dateBtn = (Button)findViewById(R.id.dateBtn);
@@ -90,6 +91,7 @@ public class ManageActivity extends AppCompatActivity {
                     }
                 },mYear,mMonth,mDay);
                 datePickerDialog.show();
+
             }
         });
 
@@ -101,6 +103,8 @@ public class ManageActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                what = strWhat.getText().toString();
+                Value = parseInt(strValue.getText().toString());
                 Intent data = new Intent();
                 data.putExtra("팩트",inoutFact);
                 data.putExtra("날짜년",cYear);
