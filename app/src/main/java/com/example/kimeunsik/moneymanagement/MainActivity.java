@@ -26,12 +26,12 @@ public class MainActivity extends AppCompatActivity {
     //시작날짜.. 끝날짜
     Button startDateBtn;
     Button endDateBtn;
-    int Syear;
-    int Smonth;
-    int Sday;
-    int Eyear;
-    int Emonth;
-    int Eday;
+    int Syear=0;
+    int Smonth=0;
+    int Sday=0;
+    int Eyear=0;
+    int Emonth=0;
+    int Eday=0;
 
     //날짜임시저장
     int Scyear;
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     int count=0;// 갯수관리
     ListView listview;
     ArrayAdapter<String> adapter;
+    int bCk=2; //버튼 무엇이 눌렸는지 확인(뭐가눌려져있나 구분위해서)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                bCk=0;
                 adapter.clear();
                 for(int a=0; a<count; a++){
                     if(ioCheck[a]==false) {
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                bCk=1;
                 adapter.clear();
                 for(int a=0; a<count; a++){
                     if(ioCheck[a]==true) {
@@ -141,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                bCk=2;
                 adapter.clear();
                 for(int a=0; a<count; a++) {
                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
@@ -174,6 +178,44 @@ public class MainActivity extends AppCompatActivity {
                         Syear=year;
                         Smonth=month+1;
                         Sday=dayOfMonth;
+
+                        //눌린 버튼에따라서!! 나타내기
+                        if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==0){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                        ) {
+                                    if(ioCheck[a]==false) {
+                                        manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+                                    }
+                                }
+                            }
+                            listview.setAdapter(adapter);
+                        }
+
+                        else if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==1){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                        ) {
+                                    if(ioCheck[a]==true) {
+                                        manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+                                    }
+                                }
+                            }
+                            listview.setAdapter(adapter);
+                        }
+
+                        else if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==2){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                        ) {
+                                    manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+                                }
+                            }
+                        }
+
                     }
                 },Scyear,Scmonth,Scday);
                 datePickerDialog.show();
@@ -200,6 +242,44 @@ public class MainActivity extends AppCompatActivity {
                         Eyear=year;
                         Emonth=month+1;
                         Eday=dayOfMonth;
+
+                        //눌린 버튼에따라서!! 나타내기
+                        if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==0){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                      ) {
+                                    if(ioCheck[a]==false) {
+                                        manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+                                    }
+                                }
+                            }
+                            listview.setAdapter(adapter);
+                        }
+
+                        else if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==1){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                        ) {
+                                    if(ioCheck[a]==true) {
+                                        manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+                                    }
+                                }
+                            }
+                            listview.setAdapter(adapter);
+                        }
+
+                        else if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==2){
+                            adapter.clear();
+                            for(int a=0; a<count; a++) {
+                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
+                                        ) {
+                                    manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+                                }
+                            }
+                        }
+
                     }
                 },Ecyear,Ecmonth,Ecday);
                 datePickerDialog.show();
@@ -214,11 +294,12 @@ public class MainActivity extends AppCompatActivity {
     {
         if (requestCode==1){
             if(resultCode==RESULT_OK){
-                    adapter.clear();
-                for(int a=0; a<count; a++) {
-                    manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
-                }
-                listview.setAdapter(adapter);
+                bCk=2;
+                adapter.clear();
+                     for(int a=0; a<count; a++) {
+                       manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+                   }
+                    listview.setAdapter(adapter);
                     ioCheck[count]=data.getBooleanExtra("체크",true);
                     AaFact.add(count,data.getStringExtra("팩트"));
                     AaWhat.add(count,data.getStringExtra("내역"));
