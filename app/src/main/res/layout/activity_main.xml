@@ -116,10 +116,12 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
+            <ListView
+                android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:scrollbars="vertical" />
         </LinearLayout>
 
         <android.support.constraint.ConstraintLayout

@@ -21,6 +21,7 @@ public class ManageActivity extends AppCompatActivity {
 
         //수입인지 지출인지 확인변수들
         String inoutFact; //수입지출
+        boolean ioCheck;
         String strColor; //수입지출 색상
         //내역
         String what;
@@ -49,12 +50,14 @@ public class ManageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(factBtn.getText()=="수입"){
                     inoutFact="지출";
+                    ioCheck=true;
                     factBtn.setText(inoutFact);
                     strColor="#FF0000";
                     factBtn.setTextColor(Color.parseColor(strColor));
                 }
                 else {
                     inoutFact="수입";
+                    ioCheck=false;
                     factBtn.setText(inoutFact);
                     strColor="#0000FF";
                     factBtn.setTextColor(Color.parseColor(strColor));
@@ -107,6 +110,7 @@ public class ManageActivity extends AppCompatActivity {
                 Value = parseInt(strValue.getText().toString());
                 Intent data = new Intent();
                 data.putExtra("팩트",inoutFact);
+                data.putExtra("체크",ioCheck);
                 data.putExtra("날짜년",cYear);
                 data.putExtra("날짜월",cMonth);
                 data.putExtra("날짜일",cDay);
