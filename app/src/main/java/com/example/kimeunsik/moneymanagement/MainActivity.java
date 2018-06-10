@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-
+    //텍스트뷰
+    TextView inputTxt;
+    TextView ouputTxt;
+    TextView totalTxt;
     //시작날짜.. 끝날짜
     Button startDateBtn;
     Button endDateBtn;
@@ -44,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 2. 날짜 –2)어레이3)시작날 지정하는 변수 – 하나만 있어도ok4)마지막날 지정하는 변수 – 하나만 있어도ok
                 3. 5)내역 -어레이
                 4. 금액 –어레이(6)수입,7)지출,8)합계)*/
-    String aFact; // 수입지출
-    boolean ioCheck;
-    int aSum=0; //합계금액
+    boolean[] ioCheck=new boolean[10];
+    int aTSum=0; //합계금액
+    int aISum=0; //소비합계
+    int aOSum=0; //지출합계
     ArrayList<String> AaFact=null; // 수입지출
     ArrayList<String> AaWhat=null; // 뭐에썼니?
     ArrayList<String> manage=null; // 전체관리
@@ -54,10 +58,9 @@ public class MainActivity extends AppCompatActivity {
     int[] AaYear=new int[10];
     int[] AaMonth=new int[10];
     int[] AaDay=new int[10];
-    int count=0; // 갯수관리
+    int count=0;// 갯수관리
     ListView listview;
     ArrayAdapter<String> adapter;
-    String strColor; //수입지출 색상
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         AaWhat = new ArrayList<String>();
         manage = new ArrayList<String>();
 
+        //텍스트뷰 생성
+        inputTxt = (TextView) findViewById(R.id.inputValue);
+        ouputTxt = (TextView) findViewById(R.id.outputValue);
+        totalTxt = (TextView) findViewById(R.id.sumValue);
 
 
         //관리버튼
@@ -98,7 +105,16 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-
+                adapter.clear();
+                for(int a=0; a<count; a++){
+                    if(ioCheck[a]==false) {
+                        manage.add(AaYear[a]+"년 "+AaMonth[a]+"월 "+AaDay[a]+"일 \n"+AaWhat.get(a)+"\n"+"금액  "+AaValue[a]+"원");
+                    }
+                }
+                listview.setAdapter(adapter);
+                inputTxt.setText(Integer.toString(aISum));
+                ouputTxt.setText(Integer.toString(0));
+                totalTxt.setText(Integer.toString(aISum));
             }
         });
 
@@ -107,7 +123,16 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-
+                adapter.clear();
+                for(int a=0; a<count; a++){
+                    if(ioCheck[a]==true) {
+                        manage.add(AaYear[a]+"년 "+AaMonth[a]+"월 "+AaDay[a]+"일 \n"+AaWhat.get(a)+"\n"+"금액  "+AaValue[a]+"원");
+                    }
+                }
+                listview.setAdapter(adapter);
+                ouputTxt.setText(Integer.toString(aOSum));
+                inputTxt.setText(Integer.toString(0));
+                totalTxt.setText(Integer.toString(-aOSum));
             }
         });
 
@@ -116,8 +141,16 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                adapter.clear();
+                for(int a=0; a<count; a++) {
+                        manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+                    }
+                listview.setAdapter(adapter);
+                inputTxt.setText(Integer.toString(aISum));
+                ouputTxt.setText(Integer.toString(aOSum));
+                totalTxt.setText(Integer.toString(aTSum));
+                }
 
-            }
         });
 
 
@@ -181,7 +214,12 @@ public class MainActivity extends AppCompatActivity {
     {
         if (requestCode==1){
             if(resultCode==RESULT_OK){
-                    ioCheck=data.getBooleanExtra("체크",true);
+                    adapter.clear();
+                for(int a=0; a<count; a++) {
+                    manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+                }
+                listview.setAdapter(adapter);
+                    ioCheck[count]=data.getBooleanExtra("체크",true);
                     AaFact.add(count,data.getStringExtra("팩트"));
                     AaWhat.add(count,data.getStringExtra("내역"));
                     AaYear[count]=data.getIntExtra("날짜년",0);
@@ -190,21 +228,26 @@ public class MainActivity extends AppCompatActivity {
                     AaValue[count]=data.getIntExtra("금액",0);
 
                 //리스트
-                if(ioCheck==false){
-                    aSum=aSum+AaValue[count];
-                    manage.add(AaYear[count]+"년 "+AaMonth[count]+"월 "+AaDay[count]+"일 \n"+AaFact.get(count)+"("+AaWhat.get(count)+")"+"\n"+"금액  "+AaValue[count]+"원 "+"                               합계  "+aSum+"원");
-
+                if(ioCheck[count]==false){ //소득
+                    aTSum=aTSum+AaValue[count];
+                    manage.add(AaYear[count]+"년 "+AaMonth[count]+"월 "+AaDay[count]+"일 \n"+AaFact.get(count)+"("+AaWhat.get(count)+")"+"\n"+"금액  "+AaValue[count]+"원 ");
+                    aISum=aISum+AaValue[count];
+                    inputTxt.setText(Integer.toString(aISum));
+                    totalTxt.setText(Integer.toString(aTSum));
                     count++;
-
                     listview.setAdapter(adapter);
 
                 }
 
-                else{
-                    aSum=aSum-AaValue[count];
-                    manage.add(AaYear[count]+"년 "+AaMonth[count]+"월 "+AaDay[count]+"일 \n"+AaFact.get(count)+"("+AaWhat.get(count)+")"+"\n"+"금액  "+AaValue[count]+"원 "+"                               합계  "+aSum+"원");
+                else{ //지출
+                    aTSum=aTSum-AaValue[count];
+                    manage.add(AaYear[count]+"년 "+AaMonth[count]+"월 "+AaDay[count]+"일 \n"+AaFact.get(count)+"("+AaWhat.get(count)+")"+"\n"+"금액  "+AaValue[count]+"원 ");
+                    aOSum=aOSum+AaValue[count];
+                    ouputTxt.setText(Integer.toString(aOSum));
+                    totalTxt.setText(Integer.toString(aTSum));
                     count++;
                     listview.setAdapter(adapter);
+
                 }
             }
         }
