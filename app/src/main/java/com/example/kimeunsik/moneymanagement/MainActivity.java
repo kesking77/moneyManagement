@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //리스트뷰,어댑터생성
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,manage);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,manage);
         listview = (ListView)findViewById(R.id.list);
 
 
@@ -110,11 +110,13 @@ public class MainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int a;
-                a=listview.getCheckedItemPosition();
-                manage.remove(a);
+
+
+                //int i=listview.getCheckedItemPosition();
+                /*manage.remove(a);
                 listview.clearChoices();
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();*/
+
             }
         });
 
