@@ -13,10 +13,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     //텍스트뷰
@@ -62,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
     ListView listview;
     ArrayAdapter<String> adapter;
     int bCk=2; //버튼 무엇이 눌렸는지 확인(뭐가눌려져있나 구분위해서)
+
+    String s1;
+    Date d1;
+    String s2;
+    Date d2;
+    String s3;
+    Date d3;
+    int compareS;
+    int compareE;
+    SimpleDateFormat simpleDateFormat1;
+    SimpleDateFormat simpleDateFormat2;
+    SimpleDateFormat simpleDateFormat3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +175,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
+        simpleDateFormat1=new SimpleDateFormat("yyyy-M-d");
+        simpleDateFormat2=new SimpleDateFormat("yyyy-M-d");
+        simpleDateFormat3=new SimpleDateFormat("yyyy-M-d");
         //start 데이트피커
         startDateBtn = (Button)findViewById(R.id.startDate);
         startDateBtn.setOnClickListener(new View.OnClickListener()
@@ -179,12 +197,30 @@ public class MainActivity extends AppCompatActivity {
                         Smonth=month+1;
                         Sday=dayOfMonth;
 
+
+                        s1 = (Integer.toString(Syear)+"-"+Integer.toString(Smonth)+"-"+Integer.toString(Sday));
+                        try {
+                            d1 = simpleDateFormat1.parse(s1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+
                         //눌린 버튼에따라서!! 나타내기
                         if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==0){
                             adapter.clear();
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                        ) {
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareS=d1.compareTo(d2);
+
+
+                                if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==false) {
                                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
                                     }
@@ -196,8 +232,16 @@ public class MainActivity extends AppCompatActivity {
                         else if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==1){
                             adapter.clear();
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                        ) {
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareS=d1.compareTo(d2);
+
+                                if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==true) {
                                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
                                     }
@@ -209,8 +253,17 @@ public class MainActivity extends AppCompatActivity {
                         else if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==2){
                             adapter.clear();
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                        ) {
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareS=d1.compareTo(d2);
+
+
+                                if ((compareS<=0) && (compareE>0)) {
                                     manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
                                 }
                             }
@@ -243,12 +296,31 @@ public class MainActivity extends AppCompatActivity {
                         Emonth=month+1;
                         Eday=dayOfMonth;
 
+                        s3 = (Integer.toString(Eyear)+"-"+Integer.toString(Emonth)+"-"+Integer.toString(Eday));
+
+                        try {
+                            d3 = simpleDateFormat1.parse(s3);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+
                         //눌린 버튼에따라서!! 나타내기
                         if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==0){
                             adapter.clear();
+
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                      ) {
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareE=d3.compareTo(d2);
+
+
+                                if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==false) {
                                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
                                     }
@@ -260,8 +332,19 @@ public class MainActivity extends AppCompatActivity {
                         else if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==1){
                             adapter.clear();
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                        ) {
+
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareE=d3.compareTo(d2);
+
+
+
+                                if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==true) {
                                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
                                     }
@@ -272,9 +355,21 @@ public class MainActivity extends AppCompatActivity {
 
                         else if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==2){
                             adapter.clear();
+
                             for(int a=0; a<count; a++) {
-                                if ((Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth==AaMonth[a])&&(Emonth==AaMonth[a])&&(Sday<=AaDay[a])&&(AaDay[a]<=Eday)||(Syear==AaYear[a])&&(Eyear==AaYear[a])&&(Smonth<=AaMonth[a])&&(AaMonth[a]<=Emonth)
-                                        ) {
+
+
+                                s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+                                try {
+                                    d2 = simpleDateFormat2.parse(s2);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                compareE=d3.compareTo(d2);
+
+
+
+                                if ((compareS<=0) && (compareE>0)  ) {
                                     manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
                                 }
                             }
@@ -333,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
 
 
