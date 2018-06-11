@@ -2,21 +2,15 @@ package com.example.kimeunsik.moneymanagement;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Field;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     int Eyear=0;
     int Emonth=0;
     int Eday=0;
-
     //날짜임시저장
     int Scyear;
     int Scmonth;
@@ -45,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
     int Ecyear;
     int Ecmonth;
     int Ecday;
-
-    //배열
     /*넘겨 받아 관리해야 하는 것
                 1. 수입/지출 –1)어레이
                 2. 날짜 –2)어레이3)시작날 지정하는 변수 – 하나만 있어도ok4)마지막날 지정하는 변수 – 하나만 있어도ok
@@ -67,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listview;
     ArrayAdapter<String> adapter;
     int bCk=2; //버튼 무엇이 눌렸는지 확인(뭐가눌려져있나 구분위해서)
-
+    //날짜 선택 관련 변수
     String s1;
     Date d1;
     String s2;
@@ -80,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat simpleDateFormat2;
     SimpleDateFormat simpleDateFormat3;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,15 +81,15 @@ public class MainActivity extends AppCompatActivity {
         AaFact = new ArrayList<String>();
         AaWhat = new ArrayList<String>();
         manage = new ArrayList<String>();
-
         //텍스트뷰 생성
+
         inputTxt = (TextView) findViewById(R.id.inputValue);
         ouputTxt = (TextView) findViewById(R.id.outputValue);
         totalTxt = (TextView) findViewById(R.id.sumValue);
 
-
         //관리버튼
         Button manageMoneyBtn = (Button)findViewById(R.id.manageMoney);
+
         //관리버튼 누르면 관리액티비티시행
         manageMoneyBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -108,14 +100,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         //리스트뷰,어댑터생성
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,manage);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice,manage);
         listview = (ListView)findViewById(R.id.list);
 
 
 
+        //리스트뷰 아이템 클릭리스너
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int a;
+                a=listview.getCheckedItemPosition();
+                manage.remove(a);
+                listview.clearChoices();
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         //수입지출합계 버튼
         Button inputMoneyBtn = (Button)findViewById(R.id.inputMoney);
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //여기서부터 날짜 선택 관련
         simpleDateFormat1=new SimpleDateFormat("yyyy-M-d");
         simpleDateFormat2=new SimpleDateFormat("yyyy-M-d");
         simpleDateFormat3=new SimpleDateFormat("yyyy-M-d");
@@ -196,15 +198,12 @@ public class MainActivity extends AppCompatActivity {
                         Syear=year;
                         Smonth=month+1;
                         Sday=dayOfMonth;
-
-
                         s1 = (Integer.toString(Syear)+"-"+Integer.toString(Smonth)+"-"+Integer.toString(Sday));
                         try {
                             d1 = simpleDateFormat1.parse(s1);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-
 
                         //눌린 버튼에따라서!! 나타내기
                         if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==0){
@@ -261,20 +260,16 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 compareS=d1.compareTo(d2);
-
-
                                 if ((compareS<=0) && (compareE>0)) {
                                     manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
                                 }
                             }
                         }
-
                     }
                 },Scyear,Scmonth,Scday);
                 datePickerDialog.show();
             }
         });
-
 
 
         //end 데이트피커
@@ -374,7 +369,6 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         }
-
                     }
                 },Ecyear,Ecmonth,Ecday);
                 datePickerDialog.show();
@@ -412,7 +406,6 @@ public class MainActivity extends AppCompatActivity {
                     totalTxt.setText(Integer.toString(aTSum));
                     count++;
                     listview.setAdapter(adapter);
-
                 }
 
                 else{ //지출
@@ -423,13 +416,8 @@ public class MainActivity extends AppCompatActivity {
                     totalTxt.setText(Integer.toString(aTSum));
                     count++;
                     listview.setAdapter(adapter);
-
                 }
             }
         }
     }
-
-
-
-
 }
