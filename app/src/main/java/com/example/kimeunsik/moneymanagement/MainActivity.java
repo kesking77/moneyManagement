@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat simpleDateFormat1;
     SimpleDateFormat simpleDateFormat2;
     SimpleDateFormat simpleDateFormat3;
-
+    int p=0;
+    int[] tempP=new int[10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +115,47 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                //int i=listview.getCheckedItemPosition();
-                /*manage.remove(a);
-                listview.clearChoices();
-                adapter.notifyDataSetChanged();*/
+                   /* manage.remove(position);
+                    listview.clearChoices();
+                    adapter.notifyDataSetChanged(); */
+                   if((count==0)||(count==1)){
+                       adapter.clear();
+                       inputTxt.setText(Integer.toString(0));
+                       ouputTxt.setText(Integer.toString(0));
+                       totalTxt.setText(Integer.toString(0));
+                   }
+                   else{
+                        //갯수 2이상일때
+                       manage.remove(position);
+                       tempP[p]=position;
+                       p++;
+                       if(bCk==0){
+                            aISum=aISum-AaValue[position];
+                            inputTxt.setText(Integer.toString(aISum));
+                            totalTxt.setText(Integer.toString(aISum));
+                       }
+                       else if(bCk==1){
+                           aOSum=aOSum-AaValue[position];
+                           ouputTxt.setText(Integer.toString(aOSum));
+                           totalTxt.setText(Integer.toString(-aOSum));
+                       }
+                       if(bCk==2){
+                           if(ioCheck[position]==false) {
+                               aISum=aISum-AaValue[position];
+                               aTSum = aTSum - AaValue[position];
+                           }
+                           else{
+                               aOSum=aOSum-AaValue[position];
+                               aTSum = aTSum + AaValue[position];
+                           }
+                           inputTxt.setText(Integer.toString(aISum));
+                           ouputTxt.setText(Integer.toString(aOSum));
+                           totalTxt.setText(Integer.toString(aTSum));
+                       }
+
+                       listview.clearChoices();
+                       adapter.notifyDataSetChanged();
+                   }
 
             }
         });
@@ -129,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 bCk=0;
                 adapter.clear();
                 for(int a=0; a<count; a++){
+
                     if(ioCheck[a]==false) {
                         manage.add(AaYear[a]+"년 "+AaMonth[a]+"월 "+AaDay[a]+"일 \n"+AaWhat.get(a)+"\n"+"금액  "+AaValue[a]+"원");
                     }
@@ -148,9 +189,11 @@ public class MainActivity extends AppCompatActivity {
                 bCk=1;
                 adapter.clear();
                 for(int a=0; a<count; a++){
-                    if(ioCheck[a]==true) {
-                        manage.add(AaYear[a]+"년 "+AaMonth[a]+"월 "+AaDay[a]+"일 \n"+AaWhat.get(a)+"\n"+"금액  "+AaValue[a]+"원");
-                    }
+
+                        if (ioCheck[a] == true) {
+                            manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+                        }
+
                 }
                 listview.setAdapter(adapter);
                 ouputTxt.setText(Integer.toString(aOSum));
@@ -167,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
                 bCk=2;
                 adapter.clear();
                 for(int a=0; a<count; a++) {
+
                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
+
                     }
                 listview.setAdapter(adapter);
                 inputTxt.setText(Integer.toString(aISum));
@@ -201,25 +246,26 @@ public class MainActivity extends AppCompatActivity {
                         Smonth=month+1;
                         Sday=dayOfMonth;
                         s1 = (Integer.toString(Syear)+"-"+Integer.toString(Smonth)+"-"+Integer.toString(Sday));
+
                         try {
                             d1 = simpleDateFormat1.parse(s1);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
+
                         //눌린 버튼에따라서!! 나타내기
-                        if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==0){
+                        if(((Eday!=0)&&(Eyear!=0)&&(Emonth!=0))&&bCk==0){
                             adapter.clear();
                             for(int a=0; a<count; a++) {
-
                                 s2 = (Integer.toString(AaYear[a])+"-"+Integer.toString(AaMonth[a])+"-"+Integer.toString(AaDay[a]));
+
                                 try {
                                     d2 = simpleDateFormat2.parse(s2);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                                 compareS=d1.compareTo(d2);
-
 
                                 if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==false) {
@@ -228,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                             listview.setAdapter(adapter);
+
                         }
 
                         else if((Eday!=0)&&(Eyear!=0)&&(Emonth!=0)&&bCk==1){
@@ -266,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
                                     manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
                                 }
                             }
+                            listview.setAdapter(adapter);
                         }
                     }
                 },Scyear,Scmonth,Scday);
@@ -296,14 +344,14 @@ public class MainActivity extends AppCompatActivity {
                         s3 = (Integer.toString(Eyear)+"-"+Integer.toString(Emonth)+"-"+Integer.toString(Eday));
 
                         try {
-                            d3 = simpleDateFormat1.parse(s3);
+                            d3 = simpleDateFormat3.parse(s3);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
 
                         //눌린 버튼에따라서!! 나타내기
-                        if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==0){
+                        if(((Sday!=0)&&(Syear!=0)&&(Smonth!=0))&&bCk==0){
                             adapter.clear();
 
                             for(int a=0; a<count; a++) {
@@ -320,10 +368,13 @@ public class MainActivity extends AppCompatActivity {
                                 if ((compareS<=0) && (compareE>0)) {
                                     if(ioCheck[a]==false) {
                                         manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaWhat.get(a) + "\n" + "금액  " + AaValue[a] + "원");
+
                                     }
                                 }
                             }
+
                             listview.setAdapter(adapter);
+
                         }
 
                         else if((Sday!=0)&&(Syear!=0)&&(Smonth!=0)&&bCk==1){
@@ -364,12 +415,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 compareE=d3.compareTo(d2);
 
-
-
                                 if ((compareS<=0) && (compareE>0)  ) {
                                     manage.add(AaYear[a] + "년 " + AaMonth[a] + "월 " + AaDay[a] + "일 \n" + AaFact.get(a) + "(" + AaWhat.get(a) + ")" + "\n" + "금액  " + AaValue[a] + "원 ");
                                 }
                             }
+                            listview.setAdapter(adapter);
                         }
                     }
                 },Ecyear,Ecmonth,Ecday);
